@@ -10,15 +10,14 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // ✅ Jika tidak ada token, jangan fetch user
+    // ✅ Tidak ada token → tidak perlu fetch user
     if (!token) {
-      setUser(null);
       setLoading(false);
       return;
     }
@@ -28,35 +27,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const userData = await authService.fetchUser();
         setUser(userData);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        // ✅ Token invalid / expired
         localStorage.removeItem("token");
         setUser(null);
+        navigate("/login", { replace: true });
       } finally {
         setLoading(false);
       }
     };
 
     initializeUser();
-  }, []);
+  }, [navigate]);
 
   const login = async (email: string, password: string) => {
-    try {
-      const userData = await authService.login(email, password);
-      setUser(userData);
+    const userData = await authService.login(email, password);
 
-      // ✅ Redirect setelah login (sesuaikan dengan role jika perlu)
-      navigate("/dashboard", { replace: true });
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
+    // ✅ Simpan token
+    if (userData.token) {
+      localStorage.setItem("token", userData.token);
     }
+
+    setUser(userData);
+    navigate("/dashboard", { replace: true });
   };
 
   const logout = async () => {
     try {
       await authService.logout();
-    } catch (error) {
-      console.error("Logout failed:", error);
     } finally {
       localStorage.removeItem("token");
       setUser(null);
