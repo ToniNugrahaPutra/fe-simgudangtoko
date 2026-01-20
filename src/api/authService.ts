@@ -4,11 +4,11 @@ import { AxiosError } from "axios";
 
 export const authService = {
   /**
-   * Ambil user login saat ini (endpoint protected)
+   * Ambil user login saat ini
    */
-  fetchUser: async (): Promise<User | null> => {
+  fetchUser: async (): Promise<User> => {
     try {
-      const { data } = await apiClient.get("/pengguna");
+      const { data } = await apiClient.get("/me");
 
       return {
         ...data,
@@ -16,7 +16,6 @@ export const authService = {
       };
     } catch (error) {
       if (error instanceof AxiosError) {
-        // Jika token invalid / expired
         if (error.response?.status === 401) {
           localStorage.removeItem("token");
         }
@@ -31,7 +30,7 @@ export const authService = {
   },
 
   /**
-   * Login dan simpan token Sanctum
+   * Login
    */
   login: async (email: string, password: string): Promise<User> => {
     try {
@@ -40,19 +39,12 @@ export const authService = {
         password,
       });
 
-      const token: string = data.token;
+      const token: string = data.access_token;
 
-      // Simpan token
       localStorage.setItem("token", token);
-
-      // Pasang Authorization header global
-      apiClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${token}`;
 
       return {
         ...data.user,
-        token,
         roles: data.user.roles ?? [],
       };
     } catch (error) {
@@ -67,7 +59,7 @@ export const authService = {
   },
 
   /**
-   * Logout dan hapus token
+   * Logout
    */
   logout: async (): Promise<void> => {
     try {
@@ -76,7 +68,6 @@ export const authService = {
       console.error("Logout failed", error);
     } finally {
       localStorage.removeItem("token");
-      delete apiClient.defaults.headers.common["Authorization"];
       window.location.href = "/login";
     }
   },

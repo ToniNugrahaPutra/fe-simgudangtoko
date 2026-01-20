@@ -6,13 +6,15 @@ const apiClient = axios.create({
     Accept: "application/json",
     "Content-Type": "application/json",
   },
+  withCredentials: false,
 });
 
-// ✅ SELALU ambil token TERBARU sebelum request dikirim
+// Attach token otomatis
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
   if (token) {
+    config.headers = config.headers ?? {};
     config.headers.Authorization = `Bearer ${token}`;
   }
 
