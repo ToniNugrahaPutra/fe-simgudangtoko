@@ -10,7 +10,7 @@ export const useFetchUsers = () => {
   return useQuery<User[], AxiosError>({
     queryKey: ["users"],
     queryFn: async () => {
-      const response = await apiClient.get("/users");
+      const response = await apiClient.get("/pengguna");
       return response.data;
     },
   });
@@ -21,7 +21,7 @@ export const useFetchUser = (id: number) => {
   return useQuery<User, AxiosError>({
     queryKey: ["user", id],
     queryFn: async () => {
-      const response = await apiClient.get(`/users/${id}`);
+      const response = await apiClient.get(`/pengguna/${id}`);
       return response.data;
     },
     enabled: !!id,
@@ -41,17 +41,15 @@ export const useCreateUser = () => {
       formData.append("email", payload.email);
       formData.append("password", payload.password);
       formData.append("password_confirmation", payload.password_confirmation);
-      formData.append("photo", payload.photo);
-
-      const response = await apiClient.post("/users", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-
-      });
+      if (payload.photo) {formData.append("photo", payload.photo);
+}
+      const response = await apiClient.post("/pengguna", formData, {
+        headers: { "Content-Type": "multipart/form-data" }, });
       return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] }); // Refresh product list
-      navigate("/users");
+      navigate("/pengguna");
 
     },
   });
@@ -73,15 +71,13 @@ export const useUpdateUser = () => {
       formData.append("email", payload.email);
       formData.append("password", payload.password);
       formData.append("password_confirmation", payload.password_confirmation);
-      formData.append("photo", payload.photo);
-
       formData.append("_method", "PUT"); // ✅ Laravel expects this for PUT with FormData
 
       if (payload.photo) {
         formData.append("photo", payload.photo);
       }
 
-      const response = await apiClient.post(`/users/${id}`, formData, {
+      const response = await apiClient.post(`/pengguna/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -102,7 +98,7 @@ export const useDeleteUser = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/users/${id}`);
+      await apiClient.delete(`/pengguna/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });

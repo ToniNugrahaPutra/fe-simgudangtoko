@@ -23,7 +23,7 @@ const ProductList = () => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/products/${id}`, {
+      const response = await fetch(`http://localhost:8000/api/produk/${id}`, {
         method: "DELETE",
       });
 
@@ -70,7 +70,7 @@ const ProductList = () => {
                   </p>
                 </div>
                 <Link
-                  to="/products/add"
+                  to="/produk/add"
                   className="bg-primary font-semibold flex items-center text-white h-12 px-5 rounded-full"
                 >
                   Tambah Produk
@@ -130,20 +130,14 @@ const ProductList = () => {
 
                                 {/* Harga */}
                                 <td className="px-3 py-2 text-sm font-semibold text-monday-blue whitespace-nowrap">
-                                  Rp {product.price.toLocaleString("id")}
+                                  Rp {Number(product.price ?? 0).toLocaleString("id")}
                                 </td>
 
                                 {/* Kategori */}
                                 <td className="px-3 py-2 text-sm whitespace-nowrap text-gray-700">
                                   <div className="flex items-center space-x-2">
-                                    <img
-                                      src={`http://localhost:8000${product.category.photo}`}
-                                      className="size-7 flex shrink-0"
-                                      alt="category"
-                                    />
-                                    <span className="font-medium">
-                                      {product.category.name}
-                                    </span>
+                                    <img src={`http://localhost:8000${product.category?.photo || ""}`} />
+                                    <span>{product.category?.name || "-"}</span>
                                   </div>
                                 </td>
 
@@ -159,7 +153,7 @@ const ProductList = () => {
                                       Detail
                                     </button>
                                     <Link
-                                      to={`/products/edit/${product.id}`}
+                                      to={`/produk/edit/${product.id}`}
                                       className="font-semibold flex items-center justify-center text-blue-600"
                                     >
                                       <img
@@ -242,7 +236,7 @@ const ProductList = () => {
                     {selectedProduct.category.name}
                   </p>
                   <p className="font-semibold text-[17px] text-monday-blue">
-                    Rp {selectedProduct.price.toLocaleString("id")}
+                    Rp {Number(selectedProduct.price ?? 0).toLocaleString("id")}
                   </p>
                 </div>
                 <div className="flex size-[100px] rounded-2xl bg-font-background items-center justify-center overflow-hidden">

@@ -28,7 +28,7 @@ const WarehouseProductList = () => {
             className="flex items-center w-full gap-5 mt-5 mb-6"
           >
             <div id="Top-Bar" className="flex items-center w-full gap-6">
-              <UserProfileCard title="Detail Gudang" backLink="/warehouses" />
+              <UserProfileCard title="Detail Gudang" backLink="/gudang" />
             </div>
           </div>
           <main className="flex flex-col gap-6 flex-1">
@@ -50,7 +50,7 @@ const WarehouseProductList = () => {
                 </p>
               </div>
               <Link
-                to={`/warehouses/edit/${warehouse.id}`}
+                to={`/gudang/edit/${warehouse.id}`}
                 className="bg-primary text-white px-3 py-2 rounded-full font-semibold text-nowrap ease-in-out duration-300 transition hover:text-primary hover:bg-white hover:border-primary"
               >
                 Edit Gudang

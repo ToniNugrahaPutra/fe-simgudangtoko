@@ -15,7 +15,7 @@ export const useAssignWarehouseProduct = () => {
   >({
     mutationFn: async ({ warehouse_id, ...payload }) => {
       const response = await apiClient.post(
-        `/warehouses/${warehouse_id}/products`,
+        `/gudang/${warehouse_id}/produk`,
         payload
       );
       return response.data;
@@ -51,7 +51,7 @@ export const useUpdateWarehouseProduct = () => {
       formData.append("_method", "PUT"); // ✅ Laravel recognizes this as an update
 
       const response = await apiClient.post(
-        `/warehouses/${warehouse_id}/products/${product_id}`,
+        `/gudang/${warehouse_id}/produk/${product_id}`,
         formData,
       );
 

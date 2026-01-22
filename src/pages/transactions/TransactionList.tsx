@@ -69,7 +69,7 @@ const TransactionList = () => {
                     </span>
                   </p>
                 </div>
-                <Link to={"/transactions/add"} className="bg-primary font-semibold flex items-center text-white h-12 px-5 rounded-full">
+                <Link to={"/transaksi/add"} className="bg-primary font-semibold flex items-center text-white h-12 px-5 rounded-full">
                   Transaksi Baru
                   <PlusIcon className="ml-2 size-6" />
                 </Link>

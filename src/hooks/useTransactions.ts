@@ -15,7 +15,7 @@ export const useCreateTransaction = () => {
   return useMutation<CreateTransactionResponse, AxiosError<ApiErrorResponse>, CreateTransactionPayload>({
     mutationFn: async (payload) => {
       // const response = await apiClient.post("/transactions", payload);
-      const response = await apiClient.post<CreateTransactionResponse>("/transactions", payload);
+      const response = await apiClient.post<CreateTransactionResponse>("/transaksi", payload);
       return response.data;
     },
     onSuccess: ({data}) => {
@@ -31,7 +31,7 @@ export const useCreateTransaction = () => {
       clearTransaction();  
 
       // 🚀 Navigate with transaction state
-      navigate("/transactions/success", {
+      navigate("/transaksi/success", {
         state: {
           customerName: transaction.name,
           totalItems,
@@ -54,9 +54,9 @@ export const useFetchMerchantTransactions = (
   options?: Partial<UseQueryOptions<Transaction[], AxiosError>>
 ) => {
   return useQuery<Transaction[], AxiosError>({
-    queryKey: ["my-merchant/transactions"],
+    queryKey: ["my-toko/transaksi"],
     queryFn: async () => {
-      const response = await apiClient.get("/my-merchant/transactions");
+      const response = await apiClient.get("/my-toko/transaksi");
       return response.data.data;
     },
     retry: false, 
@@ -69,7 +69,7 @@ export const useFetchMerchantTransactions = (
     return useQuery<Transaction, AxiosError>({
       queryKey: ["transaction", id],
       queryFn: async () => {
-        const response = await apiClient.get(`/transactions/${id}`);
+        const response = await apiClient.get(`/transaksi/${id}`);
         return response.data;
       },
       enabled: !!id, // Only fetch if ID is available
@@ -80,7 +80,7 @@ export const useFetchMerchantTransactions = (
     return useQuery<Transaction[], AxiosError>({
       queryKey: ["all-transactions"],
       queryFn: async () => {
-        const response = await apiClient.get("/transactions");
+        const response = await apiClient.get("/transaksi");
         return response.data;
       },
     });

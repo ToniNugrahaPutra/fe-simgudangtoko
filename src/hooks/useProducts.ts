@@ -9,7 +9,7 @@ export const useFetchProducts = () => {
   return useQuery<Product[], AxiosError>({
     queryKey: ["products"],
     queryFn: async () => {
-      const response = await apiClient.get("/products");
+      const response = await apiClient.get("/produk");
       return response.data;
     },
   });
@@ -20,7 +20,7 @@ export const useFetchProduct = (id: number) => {
   return useQuery<Product, AxiosError>({
     queryKey: ["product", id],
     queryFn: async () => {
-      const response = await apiClient.get(`/products/${id}`);
+      const response = await apiClient.get(`/produk/${id}`);
       return response.data;
     },
     enabled: !!id,
@@ -43,7 +43,7 @@ export const useCreateProduct = () => {
       formData.append("is_popular", payload.is_popular ? "1" : "0");
       formData.append("thumbnail", payload.thumbnail);
 
-      const response = await apiClient.post("/products", formData, {
+      const response = await apiClient.post("/produk", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -80,7 +80,7 @@ export const useUpdateProduct = () => {
         formData.append("thumbnail", payload.thumbnail);
       }
 
-      const response = await apiClient.post(`/products/${id}`, formData, {
+      const response = await apiClient.post(`/produk/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -102,7 +102,7 @@ export const useDeleteProduct = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/products/${id}`);
+      await apiClient.delete(`/produk/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });

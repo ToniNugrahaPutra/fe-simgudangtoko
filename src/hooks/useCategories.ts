@@ -10,7 +10,7 @@ export const useFetchCategories = () => {
   return useQuery<Category[], AxiosError>({
     queryKey: ["categories"],
     queryFn: async () => {
-      const response = await apiClient.get("/categories");
+      const response = await apiClient.get("/kategori");
       return response.data;
     },
   });
@@ -21,7 +21,7 @@ export const useFetchCategory = (id: number) => {
   return useQuery<Category, AxiosError>({
     queryKey: ["category", id],
     queryFn: async () => {
-      const response = await apiClient.get(`/categories/${id}`);
+      const response = await apiClient.get(`/kategori/${id}`);
       return response.data;
     },
     enabled: !!id, // Prevent fetching when id is undefined
@@ -39,7 +39,7 @@ export const useCreateCategory = () => {
       formData.append("tagline", payload.tagline);
       formData.append("photo", payload.photo); // required
 
-      const response = await apiClient.post("/categories", formData, {
+      const response = await apiClient.post("/kategori", formData, {
         headers: { "Content-Type": "multipart/form-data" },
 
       });
@@ -47,7 +47,7 @@ export const useCreateCategory = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] }); // Refresh product list
-      navigate("/categories");
+      navigate("/category");
 
     },
   });
@@ -72,7 +72,7 @@ export const useUpdateCategory = () => {
         formData.append("photo", payload.photo);
       }
 
-      const response = await apiClient.post(`/categories/${id}`, formData, {
+      const response = await apiClient.post(`/kategori/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -81,7 +81,7 @@ export const useUpdateCategory = () => {
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["category", id] });
-      navigate("/categories");
+      navigate("/category");
 
     },
   });
@@ -93,7 +93,7 @@ export const useDeleteCategory = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/categories/${id}`);
+      await apiClient.delete(`/kategori/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });

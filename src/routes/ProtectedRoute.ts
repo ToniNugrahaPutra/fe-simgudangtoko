@@ -12,22 +12,34 @@ const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (loading) return;
 
-    if (loading) return; // Prevent redirect while loading user data
     if (!user) {
       navigate("/login", { replace: true });
-    } else if (roles && !user.roles?.some((role) => roles.includes(role))) {
-      // console.log("Redirecting to /unauthorized"); // 🔍 Debugging log
+      return;
+    }
+
+    if (
+      roles &&
+      roles.length > 0 &&
+      !user.roles?.some((role: any) => roles.includes(role.name))
+    ) {
       navigate("/unauthorized", { replace: true });
     }
   }, [user, roles, loading, navigate]);
 
-  // if (!user || (roles && !user.roles?.some((role) => roles.includes(role)))) {
-  //   return null; // Prevent rendering protected content while redirecting
-  // }
+  // ⏳ tunggu auth siap
+  if (loading) return null;
 
-  // 🚀 Only render children when authentication is ready
-  if (loading || !user || (roles && !user.roles?.some((role) => roles.includes(role)))) {
+  // ❌ belum login
+  if (!user) return null;
+
+  // ❌ role tidak sesuai
+  if (
+    roles &&
+    roles.length > 0 &&
+    !user.roles?.some((role: any) => roles.includes(role.name))
+  ) {
     return null;
   }
 

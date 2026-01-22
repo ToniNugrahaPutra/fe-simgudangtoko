@@ -9,7 +9,7 @@ export const useFetchRoles = () => {
   return useQuery<Role[], AxiosError>({
     queryKey: ["roles"],
     queryFn: async () => {
-      const response = await apiClient.get("/roles");
+      const response = await apiClient.get("/role");
       return response.data;
     },
   });
@@ -20,7 +20,7 @@ export const useFetchRole = (id: number) => {
   return useQuery<Role, AxiosError>({
     queryKey: ["role", id],
     queryFn: async () => {
-      const response = await apiClient.get(`/roles/${id}`);
+      const response = await apiClient.get(`/role/${id}`);
       return response.data;
     },
     enabled: !!id,
@@ -36,7 +36,7 @@ export const useCreateRole = () => {
       const formData = new FormData();
       formData.append("name", payload.name);
 
-      const response = await apiClient.post("/roles", formData, {
+      const response = await apiClient.post("/role", formData, {
         headers: { "Content-Type": "multipart/form-data" },
 
       });
@@ -65,7 +65,7 @@ export const useUpdateRole = () => {
       formData.append("_method", "PUT"); // ✅ Laravel expects this for PUT with FormData
  
 
-      const response = await apiClient.post(`/roles/${id}`, formData, {
+      const response = await apiClient.post(`/role/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -86,7 +86,7 @@ export const useDeleteRole = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/roles/${id}`);
+      await apiClient.delete(`/role/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });

@@ -19,11 +19,11 @@ export const useAssignUserRole = () => {
     AssignUserRolePayload
   >({
     mutationFn: async ({ user_id, role_id }) => {
-      await apiClient.post("/users/roles", { user_id, role_id });
+      await apiClient.post("/pengguna/role", { user_id, role_id });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] }); // Refresh user data
-      navigate("/users");
+      navigate("/pengguna");
 
     },
     onError: (error) => {

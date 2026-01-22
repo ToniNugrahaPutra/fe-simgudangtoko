@@ -78,7 +78,7 @@ const EditWarehouse = () => {
         {/* Top Bar */}
         <div id="Top-Bar" className="flex items-center w-full gap-5 mt-5 mb-5">
           <div id="Top-Bar" className="flex items-center w-full gap-5">
-            <UserProfileCard title="Edit Gudang" backLink="/warehouses" />
+            <UserProfileCard title="Edit Gudang" backLink="/gudang" />
           </div>
         </div>
 

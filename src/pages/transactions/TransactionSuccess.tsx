@@ -93,7 +93,7 @@ const TransactionSuccess = () => {
           
           <div className="flex flex-col gap-4">
             <Link 
-              to="/transactions"
+              to="/transaksi"
               className=" bg-primary text-white font-semibold w-full py-3 rounded-full transition-colors text-center"
             >
               Kembali ke Transaksi

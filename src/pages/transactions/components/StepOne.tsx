@@ -123,7 +123,7 @@ const StepOne = ({ handleNextStep }: { handleNextStep: () => void }) => {
 
         <div className="flex items-center justify-end gap-4 pt-4">
           <Link 
-            to="/transactions" 
+            to="/transaksi" 
             className="px-5 py-3 rounded-full border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
           >
             Cancel

@@ -66,7 +66,7 @@ const AddWarehouse = () => {
           className="flex items-center w-full gap-5 mt-5 mb-5"
         >
           <div id="Top-Bar" className="flex items-center w-full gap-5">
-            <UserProfileCard title="Tambah Gudang" backLink="/warehouses" />
+            <UserProfileCard title="Tambah Gudang" backLink="/gudang" />
           </div>
         </div>
         <main className="flex flex-col gap-5 flex-1">
@@ -193,6 +193,24 @@ const AddWarehouse = () => {
                     <p className="text-red-500">{errors.phone.message}</p>
                   )}
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="address" className="block text-sm/6 font-medium text-font">
+                  Alamat Gudang
+                </label>
+                <div className="mt-1">
+                  <input
+                    {...register("address")}
+                    id="address"
+                    type="text"
+                    className="block w-full rounded-lg bg-white p-3 text-font outline-1 -outline-offset-1 outline-border placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
+                    placeholder="Masukkan alamat gudang"
+                  />
+                </div>
+                {errors.address && (
+                  <p className="text-red-500">{errors.address.message}</p>
+                )}
               </div>
 
 

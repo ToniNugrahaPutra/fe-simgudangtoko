@@ -95,7 +95,7 @@ const AddTransaction = () => {
           id="Top-Bar"
           className="flex items-center w-full gap-5 mt-5 mb-5"
         >
-          <UserProfileCard title="Detail Toko" backLink="/transactions" />
+          <UserProfileCard title="Detail Toko" backLink="/transaksi" />
         </div>
 
         <main className="flex flex-col gap-5 flex-1">

@@ -9,7 +9,7 @@ export const useFetchWarehouses = () => {
   return useQuery<Warehouse[], AxiosError>({
     queryKey: ["warehouses"],
     queryFn: async () => {
-      const response = await apiClient.get("/warehouses");
+      const response = await apiClient.get("/gudang");
       return response.data;
     },
   });
@@ -20,7 +20,7 @@ export const useFetchWarehouse = (id: number) => {
   return useQuery<Warehouse, AxiosError>({
     queryKey: ["warehouse", id],
     queryFn: async () => {
-      const response = await apiClient.get(`/warehouses/${id}`);
+      const response = await apiClient.get(`/gudang/${id}`);
       return response.data;
     },
     enabled: !!id,
@@ -39,7 +39,7 @@ export const useCreateWarehouse = () => {
       formData.append("phone", payload.phone);
       formData.append("photo", payload.photo); // ✅ Required now
 
-      const response = await apiClient.post("/warehouses", formData, {
+      const response = await apiClient.post("/gudang", formData, {
         headers: { "Content-Type": "multipart/form-data" },
 
       });
@@ -74,7 +74,7 @@ export const useUpdateWarehouse = () => {
         formData.append("photo", payload.photo);
       }
 
-      const response = await apiClient.post(`/warehouses/${id}`, formData, {
+      const response = await apiClient.post(`/gudang/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -94,7 +94,7 @@ export const useDeleteWarehouse = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/warehouses/${id}`);
+      await apiClient.delete(`/gudang/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["warehouses"] });

@@ -46,7 +46,7 @@ const Sidebar = () => {
     );
   };
 
-  const userRoles = user?.roles || [];
+  const userRoles: string[] = user?.roles?.map((r: any) => r.name) || [];
 
   const sidebarMenus = [
     {
@@ -78,7 +78,7 @@ const Sidebar = () => {
           path: "/transactions",
           iconDefault: CreditCardOutline,
           iconPrimary: CreditCardSolid,
-          roles: ["operator"],
+          roles: ["admin", "operator"],
         },
         {
           label: "Kategori",
