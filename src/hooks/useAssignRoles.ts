@@ -5,10 +5,10 @@ import { ApiErrorResponse } from "../types/types";
 import { useNavigate } from "react-router-dom";
 
 interface AssignUserRolePayload {
-  user_id: number;
-  role_id: number;
+  pengguna_id: number;
+  role: string;
 }
- 
+
 export const useAssignUserRole = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -18,14 +18,15 @@ export const useAssignUserRole = () => {
     AxiosError<ApiErrorResponse>,
     AssignUserRolePayload
   >({
-    mutationFn: async ({ user_id, role_id }) => {
-      await apiClient.post("/pengguna/role", { user_id, role_id });
+    mutationFn: async (payload) => {
+      return apiClient.post("/pengguna/role", payload);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] }); // Refresh user data
-      navigate("/pengguna");
 
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      navigate("/users");
     },
+
     onError: (error) => {
       console.error("Failed to assign role:", error.response?.data);
     },

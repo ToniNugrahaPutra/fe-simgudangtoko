@@ -33,24 +33,16 @@ export const useCreateUser = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  return useMutation<CreateUserPayload, AxiosError<ApiErrorResponse>, CreateUserPayload>({
-    mutationFn: async (payload: CreateUserPayload) => {
-      const formData = new FormData();
-      formData.append("name", payload.name);
-      formData.append("phone", payload.phone);
-      formData.append("email", payload.email);
-      formData.append("password", payload.password);
-      formData.append("password_confirmation", payload.password_confirmation);
-      if (payload.photo) {formData.append("photo", payload.photo);
-}
+  return useMutation<FormData, AxiosError<ApiErrorResponse>, FormData>({
+    mutationFn: async (formData: FormData) => {
       const response = await apiClient.post("/pengguna", formData, {
-        headers: { "Content-Type": "multipart/form-data" }, });
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] }); // Refresh product list
-      navigate("/pengguna");
-
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      navigate("/users");
     },
   });
 };
@@ -65,17 +57,21 @@ export const useUpdateUser = () => {
     { id: number } & CreateUserPayload // payload
   >({
     mutationFn: async ({ id, ...payload }) => {
-      const formData = new FormData();
-      formData.append("name", payload.name);
-      formData.append("phone", payload.phone);
-      formData.append("email", payload.email);
-      formData.append("password", payload.password);
-      formData.append("password_confirmation", payload.password_confirmation);
-      formData.append("_method", "PUT"); // ✅ Laravel expects this for PUT with FormData
+    const formData = new FormData();
 
-      if (payload.photo) {
-        formData.append("photo", payload.photo);
-      }
+    formData.append("nama", payload.name);
+    formData.append("no_hp", payload.phone);
+
+    if (payload.email) {
+      formData.append("email", payload.email);
+    }
+
+    formData.append("password", payload.password);
+    formData.append("password_confirmation", payload.password_confirmation);
+
+    if (payload.photo instanceof File) {
+      formData.append("foto", payload.photo);
+    }
 
       const response = await apiClient.post(`/pengguna/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -98,7 +94,7 @@ export const useDeleteUser = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/pengguna/${id}`);
+      await apiClient.delete(`/users/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });

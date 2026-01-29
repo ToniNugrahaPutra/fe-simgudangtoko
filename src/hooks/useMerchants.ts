@@ -9,7 +9,7 @@ export const useFetchMerchants = () => {
   return useQuery<Merchant[], AxiosError>({
     queryKey: ["merchants"],
     queryFn: async () => {
-      const response = await apiClient.get("/merchants");
+      const response = await apiClient.get("/toko");
       return response.data;
     },
   });
@@ -45,7 +45,7 @@ export const useCreateMerchant = () => {
       formData.append("phone", payload.phone);
       formData.append("photo", payload.photo); // ✅ Required now
 
-      const response = await apiClient.post("/merchants", formData, {
+      const response = await apiClient.post("/toko", formData, {
         headers: { "Content-Type": "multipart/form-data" },
 
       });
@@ -80,7 +80,7 @@ export const useUpdateMerchant = () => {
         formData.append("photo", payload.photo);  
       }
 
-      const response = await apiClient.post(`/merchants/${id}`, formData, {
+      const response = await apiClient.post(`/toko/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -100,7 +100,7 @@ export const useDeleteMerchant = () => {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      await apiClient.delete(`/merchants/${id}`);
+      await apiClient.delete(`/toko/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["merchants"] });

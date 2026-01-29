@@ -16,7 +16,7 @@ export const useAssignProduct = () => {
   >({
     mutationFn: async ({ merchant_id, ...payload }) => {
       const response = await apiClient.post(
-        `/merchants/${merchant_id}/products`,
+        `/toko/${merchant_id}/produk`,
         payload
       );
       return response.data;
@@ -49,7 +49,7 @@ export const useUpdateMerchantProduct = () => {
       formData.append("_method", "PUT");
 
       await apiClient.post(
-        `/merchants/${merchant_id}/products/${product_id}`,
+        `/toko/${merchant_id}/produk/${product_id}`,
         formData
       );
     },
