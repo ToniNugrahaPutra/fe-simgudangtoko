@@ -1,6 +1,6 @@
-import { JSX, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth"; 
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
@@ -10,35 +10,46 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (loading) return;
 
     if (!user) {
-      navigate("/login", { replace: true });
+      navigate("/login", {
+        replace: true,
+        state: { from: location },
+      });
       return;
     }
 
-    if (
-      roles &&
-      roles.length > 0 &&
-      !user.roles?.some((role: any) => roles.includes(role.name))
-    ) {
-      navigate("/unauthorized", { replace: true });
+    if (roles && roles.length > 0) {
+      const hasAccess = user.roles?.some((r: any) =>
+        typeof r === "string"
+          ? roles.includes(r)
+          : roles.includes(r.name)
+      );
+
+      if (!hasAccess) {
+        navigate("/unauthorized", { replace: true });
+      }
     }
-  }, [user, roles, loading, navigate]);
+  }, [user, loading, roles, navigate, location]);
 
   // ⏳ tunggu auth siap
   if (loading) return null;
 
-  // ❌ belum login
+  // ❌ belum login atau role salah → redirect via effect
   if (!user) return null;
 
-  // ❌ role tidak sesuai
   if (
     roles &&
     roles.length > 0 &&
-    !user.roles?.some((role: any) => roles.includes(role.name))
+    !user.roles?.some((r: any) =>
+      typeof r === "string"
+        ? roles.includes(r)
+        : roles.includes(r.name)
+    )
   ) {
     return null;
   }

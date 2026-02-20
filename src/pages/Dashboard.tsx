@@ -1,41 +1,72 @@
 import { useState } from "react";
-import { useFetchAllTransactions } from "../hooks/useTransactions";
 import { useFetchProduct } from "../hooks/useProducts";
 import Sidebar from "../components/Sidebar";
 import UserProfileCard from "../components/UserProfileCard";
+import { useAuth } from "../hooks/useAuth";
+
 import { useFetchUsers } from "../hooks/useUsers";
+import {
+  useFetchAllTransactions,
+  useFetchMerchantTransactions,
+} from "../hooks/useTransactions";
 import {
   UserGroupIcon,
   BanknotesIcon,
   DocumentTextIcon,
   ShoppingBagIcon,
   ChevronRightIcon,
-} from "@heroicons/react/24/solid"
-
+} from "@heroicons/react/24/solid";
 
 const Dashboard = () => {
-  const { data: users } = useFetchUsers();
+const { user } = useAuth();
 
-  const { data: transactions, isPending } = useFetchAllTransactions();
+const isAdmin = user?.roles?.some((r) =>
+  typeof r === "string" ? r === "admin" : r.name === "admin"
+);
 
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(
-    null
-  );
+const adminQuery = useFetchAllTransactions(isAdmin);
+const merchantQuery = useFetchMerchantTransactions(!isAdmin);
+
+const transactions = isAdmin
+  ? adminQuery.data
+  : merchantQuery.data;
+
+const isPending = isAdmin
+  ? adminQuery.isPending
+  : merchantQuery.isPending;
+
+
+  // product modal
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const { data: selectedProduct } = useFetchProduct(selectedProductId || 0);
 
-  if (!transactions) return <p> transactions notfound...</p>;
+  // loading state
+  if (isPending) {
+    return <p>Loading data...</p>;
+  }
 
-  const totalRevenue =
-    transactions.reduce((sum, tx) => sum + tx.grand_total, 0) ?? 0;
+  // empty / belum ada data
+  // if (!transactions || transactions.length === 0) {
+  //   return <p>Tidak ada transaksi</p>;
+  // }
 
-  const totalProductsSold =
-    transactions.reduce(
-      (sum, tx) =>
-        sum + tx.transaction_products.reduce((acc, p) => acc + p.quantity, 0),
-      0
-    ) ?? 0;
+  // ======= aggregations =======
+  const totalRevenue = transactions.reduce(
+    (sum, tx) => sum + tx.grand_total,
+    0
+  );
 
-  if (isPending) return <p>Loading data...</p>;
+  const { data: users = [] } = useFetchUsers();
+
+  const totalProductsSold = transactions.reduce(
+    (sum, tx) =>
+      sum +
+      tx.transaction_products.reduce(
+        (acc, p) => acc + p.quantity,
+        0
+      ),
+    0
+  );
 
   return (
     <>

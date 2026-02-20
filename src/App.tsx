@@ -72,8 +72,8 @@ function App() {
           
           {/* Protected Routes for Manager */}
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute roles={['admin']}><Dashboard /></ProtectedRoute>} />
-          
+          <Route path="/dashboard" element={<ProtectedRoute roles={['admin', 'operator']}><Dashboard /></ProtectedRoute>} />
+
           {/* Protected Routes for Keeper */}
           <Route path="/overview-merchant" element={<ProtectedRoute roles={['operator']}><OverviewMerchant /></ProtectedRoute>} />
           <Route path="/my-merchant" element={<ProtectedRoute roles={['operator']}><MyMerchantProfile /></ProtectedRoute>} />
